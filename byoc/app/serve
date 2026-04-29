@@ -1,0 +1,33 @@
+#!/bin/bash
+
+echo "=========================================="
+echo "DIAGNOSTIC MODE - $(date)"
+echo "=========================================="
+
+echo "Step 1: Environment variables"
+echo "SAGEMAKER_BIND_TO_PORT=${SAGEMAKER_BIND_TO_PORT:-8080}"
+echo "AWS_REGION=${AWS_REGION:-not set}"
+echo "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-not set}"
+
+echo ""
+echo "Step 2: Check /opt/ml/model directory"
+ls -la /opt/ml/model/ || echo "ERROR: /opt/ml/model/ not found"
+
+echo ""
+echo "Step 3: Find subdirectories"
+find /opt/ml/model/ -mindepth 1 -maxdepth 1 -type d || echo "No subdirectories found"
+
+echo ""
+echo "Step 4: Look for start.sh"
+if [ -f /opt/ml/model/*/start.sh ]; then
+    start_sh=$(find /opt/ml/model/ -name start.sh -print -quit)
+    echo "Found start.sh at: $start_sh"
+    echo "Copying to /app/ (because /opt/ml/model is read-only)..."
+    cp "$start_sh" /app/start.sh
+    chmod +x /app/start.sh
+    echo "Executing /app/start.sh..."
+    exec /app/start.sh
+else
+    echo "ERROR: No start.sh found"
+    exit 1
+fi
