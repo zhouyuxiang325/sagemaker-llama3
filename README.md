@@ -9,7 +9,7 @@
 | **AWS DLC** | [`awsdlc/`](./awsdlc) | 直接使用 AWS 官方 SGLang Deep Learning Container | 快速上线、无需自建镜像，开箱即用 |
 | **BYOC** | [`byoc/`](./byoc) | Bring Your Own Container，自行构建镜像推送到 ECR | 需要自定义 SGLang 版本、系统依赖或启动逻辑 |
 
-两种方案均使用 SGLang 作为推理后端，暴露 **OpenAI 兼容的 Chat Completions API**，支持同步与流式推理。
+两种方案均使用 SGLang 作为推理后端，暴露 ** Chat Completions API**，支持同步与流式推理。
 
 ---
 
@@ -74,7 +74,7 @@
 | `ml.g6e.2xlarge` | 1× L40S | 48GB | **7B/8B FP16 单卡，余量充足（默认）** |
 | `ml.p4d.24xlarge` | 8× A100 | 320GB | 70B 模型 |
 
-### 已知坑点
+### 注意
 
 - **Endpoint Config 必须指定 GPU 推理 AMI**，否则报 `CannotStartContainerError` 且无 CloudWatch 日志：
 
